@@ -41,8 +41,24 @@ namespace FutureValue
             try
             {
                 decimal monthlyInvestment = Convert.ToDecimal(txtMonthlyInvestment.Text);
+
+                if (monthlyInvestment <= 0 || monthlyInvestment >= 1001)
+                {
+                    MessageBox.Show("Monthly Investment must be between 1 - 1000", "Invalid Entry");
+                }
+
                 decimal yearlyInterestRate = Convert.ToDecimal(txtInterestRate.Text);
+
+                if (yearlyInterestRate <= 0 || yearlyInterestRate >= 21)
+                {
+                    MessageBox.Show("Interest Rate must be between 1 - 20", "Invalid Entry");
+                }
+
                 int years = Convert.ToInt32(txtYears.Text);
+                if (years <= 0 || yearlyInterestRate >= 41)
+                {
+                    MessageBox.Show("Years to Invest must be between 1 - 40", "Invalid Entry");
+                }
 
                 int months = years * 12;
                 decimal monthlyInterestRate = yearlyInterestRate / 12 / 100;
@@ -106,6 +122,93 @@ namespace FutureValue
             
          // throw new Exception("An unknown exception has occured."); // Step 4
             return futureValue;
+        }
+
+/* ********************************************************************************
+ *  5. Code generic validation methods that will test for valid inputs.           *
+ *        A. IsDecimal()        txtMonthlyInvestment, txtInterestRate             *
+ *        B. IsInt32()          txtYears                                          *
+ *        C. IsWithinRange()    all input                                         *
+ *                                                                                *
+ *     Unsuccessful validation should return an an error message that includes    *
+ *     the textbox name that's being validated.                                   *
+ * ********************************************************************** Tepper */
+
+        // 5-A. Checks if input is a valid decimal
+        private string IsDecimal(string value, string name)
+        {
+            string message = "";
+            if (!Decimal.TryParse(value, out _))
+            {
+                message += name + " must be a valid decimal value. \n";
+            }
+            return message;
+        }
+
+        // 5-B. Checks if input is a valid integer
+        private string IsInt32(string value, string name)
+        {
+            string message = "";
+            if (!Int32.TryParse(value, out _))
+            {
+                message += name + " must be a valid integer value. \n";
+            }
+            return message;
+        }
+
+        // 5-C. Checks if input is within range
+        private string IsWithinRange(string value, string name, decimal min, decimal max)
+        {
+            string message = "";
+            if (Decimal.TryParse(value, out decimal number))
+            {
+                if (number < min || number > max)
+                {
+                    message += name + " must be between " + min + " and "  + max + ". \n";
+                }
+            }
+            return message;
+        }
+
+/* ********************************************************************************
+ * 6. Code an IsValidData() method that calls the three generic methods created   *
+ *    in Step 5 and returns a Boolean value that indicates a successful check.    *
+ *    Each text box should be tested for:                                         *
+ *          A. invalid format                                                     *
+ *          B. invalid range                                                      *
+ *                                                                                *
+ *    Display a dialog box with any error that occurs.                            *
+ * ********************************************************************** Tepper */
+
+        private bool IsValidData()
+        {
+            bool success = true;
+            string errorMessage = "";
+
+            // 6A & 6B Validation for txtMonthlyInvestment input
+            errorMessage += IsDecimal(txtMonthlyInvestment.Text,
+                txtMonthlyInvestment.Tag.ToString());
+            errorMessage += IsWithinRange(txtMonthlyInvestment.Text, 
+                txtMonthlyInvestment.Tag.ToString(), 1, 1000);
+
+            // 6A & 6B Validation for txtInterestRate input
+            errorMessage += IsDecimal(txtInterestRate.Text,
+                txtInterestRate.Tag.ToString());
+            errorMessage += IsWithinRange(txtInterestRate.Text,
+                txtInterestRate.Tag.ToString(), 1, 20);
+
+            // 6A & 6B Validation for txtYears input
+            errorMessage += IsInt32(txtYears.Text,
+                txtYears.Tag.ToString());
+            errorMessage += IsWithinRange(txtYears.Text,
+                txtYears.Tag.ToString(), 1, 40);
+
+            if (errorMessage != "")
+            {
+                success = false;
+                MessageBox.Show("errorMessage", "Entry Error");
+            }
+            return success;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
