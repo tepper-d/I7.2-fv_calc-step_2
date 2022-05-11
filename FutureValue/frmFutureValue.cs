@@ -88,15 +88,23 @@ namespace FutureValue
             }
         }
 
+/* ***************************************************************************************
+ *  4. Add a throw statement before the return statement in the CalculateFutureValue()   *
+ *     method that throws a new exception of the Exception class regardless of the       *
+ *     result of the calculation to test the enhancements in step 3.                     *
+ * ***************************************************************************** Tepper */
         private decimal CalculateFutureValue(decimal monthlyInvestment,
             decimal monthlyInterestRate, int months)
         {
             decimal futureValue = 0m;
+
             for (int i = 0; i < months; i++)
             {
                 futureValue = (futureValue + monthlyInvestment)
                             * (1 + monthlyInterestRate);
             }
+            
+         // throw new Exception("An unknown exception has occured."); // Step 4
             return futureValue;
         }
 
