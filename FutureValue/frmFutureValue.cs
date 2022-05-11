@@ -27,65 +27,36 @@ namespace FutureValue
             InitializeComponent();
         }
 
-/* *******************************************************************
- *  2. Add a try-catch block statement to the btnCalculate_Click()   *
- *     method that catches and handles the following occurences:     *
- *              A. FormatException                                   *
- *              B. OverflowException                                 *
- *                                                                   *
- *     <!> Display message boxes that show the appropriate message   *
- *         for each exception.                                       *
- * ********************************************************* Tepper */
+        /* *******************************************************************
+         *  2. Add a try-catch block statement to the btnCalculate_Click()   *
+         *     method that catches and handles the following occurences:     *
+         *              A. FormatException                                   *
+         *              B. OverflowException                                 *
+         *                                                                   *
+         *     <!> Display message boxes that show the appropriate message   *
+         *         for each exception.                                       *
+         *                                                                   *
+         *  7. Modify the btnCalculate_Click() event handler so it uses the  *
+         *     IsValidData() method to validate data before processing.      *
+         * ********************************************************* Tepper */
         private void btnCalculate_Click(object sender, EventArgs e)
         {
             try
             {
-                decimal monthlyInvestment = Convert.ToDecimal(txtMonthlyInvestment.Text);
-
-                if (monthlyInvestment <= 0 || monthlyInvestment >= 1001)
+                if (IsValidData()) // Step 7: input validated using IsValidData()
                 {
-                    MessageBox.Show("Monthly Investment must be between 1 - 1000", "Invalid Entry");
+                    decimal monthlyInvestment = Convert.ToDecimal(txtMonthlyInvestment.Text);
+                    decimal yearlyInterestRate = Convert.ToDecimal(txtInterestRate.Text);
+                    int years = Convert.ToInt32(txtYears.Text);
+
+                    int months = years * 12;
+                    decimal monthlyInterestRate = yearlyInterestRate / 12 / 100;
+
+                    decimal futureValue = this.CalculateFutureValue(
+                        monthlyInvestment, monthlyInterestRate, months);
+                    txtFutureValue.Text = futureValue.ToString("c");
+                    txtMonthlyInvestment.Focus();
                 }
-
-                decimal yearlyInterestRate = Convert.ToDecimal(txtInterestRate.Text);
-
-                if (yearlyInterestRate <= 0 || yearlyInterestRate >= 21)
-                {
-                    MessageBox.Show("Interest Rate must be between 1 - 20", "Invalid Entry");
-                }
-
-                int years = Convert.ToInt32(txtYears.Text);
-                if (years <= 0 || yearlyInterestRate >= 41)
-                {
-                    MessageBox.Show("Years to Invest must be between 1 - 40", "Invalid Entry");
-                }
-
-                int months = years * 12;
-                decimal monthlyInterestRate = yearlyInterestRate / 12 / 100;
-
-                decimal futureValue = this.CalculateFutureValue(
-                    monthlyInvestment, monthlyInterestRate, months);
-                txtFutureValue.Text = futureValue.ToString("c");
-                txtMonthlyInvestment.Focus();
-            }
-
-/* ******************************************
-*  2A. Catch block for FormatException      *
-* ********************************* Tepper */
-            catch (FormatException)
-            {
-                MessageBox.Show("A format exception has occured. Please check all entries.",
-                    "Invalid Data Type");
-                txtMonthlyInvestment.Focus();
-            }
-/* ******************************************
-*  2B. Catch block for OverflowException    *
-* ********************************* Tepper */
-            catch (OverflowException)
-            {
-                MessageBox.Show("An overflow exception has occured. Please enter a smaller value.",
-                    "Invalid Value");
-                txtMonthlyInvestment.Focus();
             }
 /* **************************************************************************************************
  *  3. Add a catch block that catches any other exceptions that might occur. It should display:     *
@@ -103,6 +74,41 @@ namespace FutureValue
                     "Exception");
             }
         }
+/* * Tepper ********************************* Simple input range check ******************************************************
+               
+               if (monthlyInvestment <= 0 || monthlyInvestment >= 1001)
+               {
+                 MessageBox.Show("Monthly Investment must be between 1 - 1000", "Invalid Entry");
+               }
+
+               if (yearlyInterestRate <= 0 || yearlyInterestRate >= 21)
+               {
+                    MessageBox.Show("Interest Rate must be between 1 - 20", "Invalid Entry");
+               }
+
+               if (years <= 0 || yearlyInterestRate >= 41)
+               {
+                   MessageBox.Show("Years to Invest must be between 1 - 40", "Invalid Entry");
+               }
+// 2A. Catch block for FormatException
+
+            catch (FormatException)
+            {
+                MessageBox.Show("A format exception has occured. Please check all entries.",
+                    "Invalid Data Type");
+                txtMonthlyInvestment.Focus();
+            }
+
+// 2B. Catch block for OverflowException
+
+            catch (OverflowException)
+            {
+                MessageBox.Show("An overflow exception has occured. Please enter a smaller value.",
+                    "Invalid Value");
+                txtMonthlyInvestment.Focus();
+            }
+**************************************************************************************************************** Tepper */
+
 
 /* ***************************************************************************************
  *  4. Add a throw statement before the return statement in the CalculateFutureValue()   *
