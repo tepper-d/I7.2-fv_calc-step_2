@@ -27,18 +27,18 @@ namespace FutureValue
             InitializeComponent();
         }
 
-        /* *******************************************************************
-         *  2. Add a try-catch block statement to the btnCalculate_Click()   *
-         *     method that catches and handles the following occurences:     *
-         *              A. FormatException                                   *
-         *              B. OverflowException                                 *
-         *                                                                   *
-         *     <!> Display message boxes that show the appropriate message   *
-         *         for each exception.                                       *
-         *                                                                   *
-         *  7. Modify the btnCalculate_Click() event handler so it uses the  *
-         *     IsValidData() method to validate data before processing.      *
-         * ********************************************************* Tepper */
+/* ******************************************************************
+*  2. Add a try-catch block statement to the btnCalculate_Click()   *
+*     method that catches and handles the following occurences:     *
+*              A. FormatException                                   *
+*              B. OverflowException                                 *
+*                                                                   *
+*     <!> Display message boxes that show the appropriate message   *
+*         for each exception.                                       *
+*                                                                   *
+*  7. Modify the btnCalculate_Click() event handler so it uses the  *
+*     IsValidData() method to validate data before processing.      *
+* ********************************************************* Tepper */
         private void btnCalculate_Click(object sender, EventArgs e)
         {
             try
@@ -74,22 +74,63 @@ namespace FutureValue
                     "Exception");
             }
         }
+/* *********************************************************************************
+*   6. Code an IsValidData() method that calls the three generic methods created   *
+*      in Step 5 and returns a Boolean value that indicates a successful check.    *
+*      Each text box should be tested for:                                         *
+*            A. invalid format                                                     *
+*            B. invalid range                                                      *
+*                                                                                  *
+*      Display a dialog box with any error that occurs.                            *
+* ********************************************************************** Tepper */
+
+        private bool IsValidData()
+        {
+            bool success = true;
+            string errorMessage = "";
+
+            // 6A & 6B Validation for txtMonthlyInvestment input
+            errorMessage += IsDecimal(txtMonthlyInvestment.Text,
+                txtMonthlyInvestment.Tag.ToString());
+            errorMessage += IsWithinRange(txtMonthlyInvestment.Text,
+                txtMonthlyInvestment.Tag.ToString(), 1, 1000);
+
+            // 6A & 6B Validation for txtInterestRate input
+            errorMessage += IsDecimal(txtInterestRate.Text,
+                txtInterestRate.Tag.ToString());
+            errorMessage += IsWithinRange(txtInterestRate.Text,
+                txtInterestRate.Tag.ToString(), 1, 20);
+
+            // 6A & 6B Validation for txtYears input
+            errorMessage += IsInt32(txtYears.Text,
+                txtYears.Tag.ToString());
+            errorMessage += IsWithinRange(txtYears.Text,
+                txtYears.Tag.ToString(), 1, 40);
+
+            if (errorMessage != "")
+            {
+                success = false;
+                MessageBox.Show("errorMessage", "Entry Error");
+            }
+            return success;
+        }
+
 /* * Tepper ********************************* Simple input range check ******************************************************
-               
-               if (monthlyInvestment <= 0 || monthlyInvestment >= 1001)
-               {
-                 MessageBox.Show("Monthly Investment must be between 1 - 1000", "Invalid Entry");
-               }
 
-               if (yearlyInterestRate <= 0 || yearlyInterestRate >= 21)
-               {
+                if (monthlyInvestment <= 0 || monthlyInvestment >= 1001)
+                {
+                    MessageBox.Show("Monthly Investment must be between 1 - 1000", "Invalid Entry");
+                }
+
+                if (yearlyInterestRate <= 0 || yearlyInterestRate >= 21)
+                {
                     MessageBox.Show("Interest Rate must be between 1 - 20", "Invalid Entry");
-               }
+                }
 
-               if (years <= 0 || yearlyInterestRate >= 41)
-               {
-                   MessageBox.Show("Years to Invest must be between 1 - 40", "Invalid Entry");
-               }
+                if (years <= 0 || yearlyInterestRate >= 41)
+                {
+                    MessageBox.Show("Years to Invest must be between 1 - 40", "Invalid Entry");
+                }
 // 2A. Catch block for FormatException
 
             catch (FormatException)
@@ -111,10 +152,10 @@ namespace FutureValue
 
 
 /* ***************************************************************************************
- *  4. Add a throw statement before the return statement in the CalculateFutureValue()   *
- *     method that throws a new exception of the Exception class regardless of the       *
- *     result of the calculation to test the enhancements in step 3.                     *
- * ***************************************************************************** Tepper */
+*   4. Add a throw statement before the return statement in the CalculateFutureValue()   *
+*      method that throws a new exception of the Exception class regardless of the       *
+*      result of the calculation to test the enhancements in step 3.                     *
+* ****************************************************************************** Tepper */
         private decimal CalculateFutureValue(decimal monthlyInvestment,
             decimal monthlyInterestRate, int months)
         {
@@ -174,47 +215,6 @@ namespace FutureValue
                 }
             }
             return message;
-        }
-
-/* ********************************************************************************
- * 6. Code an IsValidData() method that calls the three generic methods created   *
- *    in Step 5 and returns a Boolean value that indicates a successful check.    *
- *    Each text box should be tested for:                                         *
- *          A. invalid format                                                     *
- *          B. invalid range                                                      *
- *                                                                                *
- *    Display a dialog box with any error that occurs.                            *
- * ********************************************************************** Tepper */
-
-        private bool IsValidData()
-        {
-            bool success = true;
-            string errorMessage = "";
-
-            // 6A & 6B Validation for txtMonthlyInvestment input
-            errorMessage += IsDecimal(txtMonthlyInvestment.Text,
-                txtMonthlyInvestment.Tag.ToString());
-            errorMessage += IsWithinRange(txtMonthlyInvestment.Text, 
-                txtMonthlyInvestment.Tag.ToString(), 1, 1000);
-
-            // 6A & 6B Validation for txtInterestRate input
-            errorMessage += IsDecimal(txtInterestRate.Text,
-                txtInterestRate.Tag.ToString());
-            errorMessage += IsWithinRange(txtInterestRate.Text,
-                txtInterestRate.Tag.ToString(), 1, 20);
-
-            // 6A & 6B Validation for txtYears input
-            errorMessage += IsInt32(txtYears.Text,
-                txtYears.Tag.ToString());
-            errorMessage += IsWithinRange(txtYears.Text,
-                txtYears.Tag.ToString(), 1, 40);
-
-            if (errorMessage != "")
-            {
-                success = false;
-                MessageBox.Show("errorMessage", "Entry Error");
-            }
-            return success;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
