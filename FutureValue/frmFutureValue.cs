@@ -71,6 +71,21 @@ namespace FutureValue
                     "Invalid Value");
                 txtMonthlyInvestment.Focus();
             }
+/* **************************************************************************************************
+ *  3. Add a catch block that catches any other exceptions that might occur. It should display:     *
+ *              A. a dialog box                                                                     *
+ *              B. a message contained in the exception object                                      *
+ *              C. exception type                                                                   *
+ *              D. stack trace                                                                      *
+ * **************************************************************************************** Tepper */
+            catch (Exception ex)
+            {
+                MessageBox.Show(                       // 3-A
+                    ex.Message + "\n\n" +              // 3-B
+                    ex.GetType().ToString() + "\n" +   // 3-C
+                    ex.StackTrace,                     // 3-D
+                    "Exception");
+            }
         }
 
         private decimal CalculateFutureValue(decimal monthlyInvestment,
